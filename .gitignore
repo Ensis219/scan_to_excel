@@ -1,0 +1,52 @@
+# Папки кэша и сборки
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE (PyCharm)
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+
+# Локальные настройки, секреты, токены
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# Временные и пользовательские файлы
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Excel/CSV, которые генерируются автоматически
+*.xlsx
+*.xls
+*.csv
+
+# Картинки, которые ты просто тестируешь (если хочешь хранить только исходники)
+test_images/
+input_photos/
