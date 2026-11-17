@@ -48,24 +48,25 @@ class ScanApp:
         self.preview_label.config(image=self.tk_img)
 
     def process(self):
-        if self.image is None:
-            messagebox.showwarning("Нет фото", "Сначала выбери фото!")
-            return
-        self.status.config(text="Обрабатываю... распознавание может занять 5–15 секунд.")
-        self.root.update()
+    if self.image is None:
+        messagebox.showwarning("Нет фото", "Сначала выбери фото!")
+        return
+    self.status.config(text="Обрабатываю... распознавание может занять 5–15 секунд.")
+    self.root.update()
 
-        try:
-            # ВАЖНО: process_image ждёт путь, а у нас уже image. Упростим — распознаём напрямую
-            from ocr_utils import preprocess_for_ocr, extract_rows
-            self.rows = extract_rows(self.image)
-            if not self.rows:
-                messagebox.showinfo("Пусто", "Числа не найдены. Попробуй фото с лучшим освещением.")
-                self.status.config(text="Готов")
-                return
-            self.save_excel()
-        except Exception as e:
-            messagebox.showerror("Ошибка распознавания", str(e))
-            self.status.config(text="Ошибка")
+    try:
+        from ocr_utils import extract_rows
+        self.rows = extract_rows(self.image)
+        if not self.rows:
+            messagebox.showinfo("Пусто", "Текст не распознан. Попробуй фото с лучшим освещением.")
+            self.status.config(text="Готов")
+            return
+        if not any(r["numbers"] for r in self.rows):
+            messagebox.showinfo("Без чисел", "Текст распознан, но чисел на фото не найдено. Сохраняю только текст.")
+        self.save_excel()
+    except Exception as e:
+        messagebox.showerror("Ошибка распознавания", str(e))
+        self.status.config(text="Ошибка")
 
     def save_excel(self):
         wb = Workbook()
