@@ -77,8 +77,9 @@ def preprocess_for_ocr(image, mode="clahe"):
 
 
 
-def extract_rows(image, mode="clahe") -> list:
-    processed = preprocess_for_ocr(image, mode=mode)
+def extract_rows(image) -> list:
+    """Распознаёт текст и возвращает ВСЕ строки; числа — отдельным полем."""
+    processed = preprocess_for_ocr(image)
     config = "--psm 6"
     text = pytesseract.image_to_string(processed, lang="rus+eng", config=config)
 
@@ -87,7 +88,6 @@ def extract_rows(image, mode="clahe") -> list:
         line = line.strip()
         if not line:
             continue
-        # Достаём все числа из строки (с запятой или точкой)
         numbers = []
         for token in line.split():
             cleaned = token.replace(",", ".").strip(".,;:")
@@ -95,8 +95,7 @@ def extract_rows(image, mode="clahe") -> list:
                 numbers.append(float(cleaned))
             except ValueError:
                 continue
-        if numbers:
-            rows.append({"text": line, "numbers": numbers})
+        rows.append({"text": line, "numbers": numbers})
     return rows
 
 
